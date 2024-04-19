@@ -1,0 +1,27 @@
+build-windows:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@development
+      with:
+            submodules: 'recursive'
+    
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.2
+    - name: Add msvc-dev-cmd
+      uses: ilammy/msvc-dev-cmd@v1
+      
+      
+    - name: Build Sioyek
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: .\build_windows.bat portable
+      
+    - name: upload windows artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: uploads
+        path: sioyek-release-windows.zip
